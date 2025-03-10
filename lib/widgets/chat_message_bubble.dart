@@ -14,6 +14,8 @@ class ChatMessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSizes.paddingM,
@@ -23,39 +25,52 @@ class ChatMessageBubble extends StatelessWidget {
         mainAxisAlignment:
             message.isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
-          if (!message.isUser) _buildAvatar(),
+          if (!message.isUser) _buildAvatar(context),
           const SizedBox(width: AppSizes.paddingS),
           Flexible(
             child: Container(
               padding: const EdgeInsets.all(AppSizes.paddingM),
               decoration: BoxDecoration(
-                color:
-                    message.isUser ? AppTheme.primaryColor : Colors.grey[200],
+                color: message.isUser
+                    ? AppTheme.primaryColor
+                    : isDarkMode
+                        ? AppTheme.darkCardColor
+                        : Colors.grey[200],
                 borderRadius: BorderRadius.circular(AppSizes.radiusM),
               ),
               child: Text(
                 message.text,
                 style: GoogleFonts.poppins(
-                  color: message.isUser ? Colors.white : Colors.black87,
+                  color: message.isUser
+                      ? Colors.white
+                      : isDarkMode
+                          ? AppTheme.darkTextColor
+                          : AppTheme.lightTextColor,
                   fontSize: 14,
                 ),
               ),
             ),
           ),
           const SizedBox(width: AppSizes.paddingS),
-          if (message.isUser) _buildAvatar(),
+          if (message.isUser) _buildAvatar(context),
         ],
       ),
     );
   }
 
-  Widget _buildAvatar() {
+  Widget _buildAvatar(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return CircleAvatar(
       radius: 16,
-      backgroundColor: message.isUser ? Colors.blue : AppTheme.primaryColor,
+      backgroundColor: message.isUser
+          ? AppTheme.primaryColor.withOpacity(0.8)
+          : isDarkMode
+              ? AppTheme.darkCardColor
+              : AppTheme.lightCardColor,
       child: Icon(
         message.isUser ? Icons.person : Icons.android,
-        color: Colors.white,
+        color: message.isUser ? Colors.white : AppTheme.primaryColor,
         size: 18,
       ),
     );

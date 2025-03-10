@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/app_theme.dart';
 import '../constants/app_sizes.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ChatInput extends StatefulWidget {
   final Function(String) onSend;
@@ -43,12 +44,16 @@ class _ChatInputState extends State<ChatInput> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.all(AppSizes.paddingM),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDarkMode ? AppTheme.darkCardColor : Colors.white,
         border: Border(
-          top: BorderSide(color: Colors.grey[200]!),
+          top: BorderSide(
+            color: isDarkMode ? AppTheme.darkDividerColor : Colors.grey[200]!,
+          ),
         ),
       ),
       child: Row(
@@ -64,16 +69,27 @@ class _ChatInputState extends State<ChatInput> {
               onSubmitted: (_) {
                 if (_isComposing) _handleSubmitted();
               },
+              style: GoogleFonts.poppins(
+                color: isDarkMode
+                    ? AppTheme.darkTextColor
+                    : AppTheme.lightTextColor,
+              ),
               decoration: InputDecoration(
                 hintText: 'Mesajınızı yazın...',
                 border: InputBorder.none,
-                hintStyle: TextStyle(color: Colors.grey[400]),
+                hintStyle: GoogleFonts.poppins(
+                  color: isDarkMode
+                      ? AppTheme.darkTextColor.withOpacity(0.5)
+                      : Colors.grey[400],
+                ),
               ),
             ),
           ),
           IconButton(
             icon: const Icon(Icons.send),
-            color: _isComposing ? AppTheme.primaryColor : Colors.grey[400],
+            color: _isComposing
+                ? AppTheme.primaryColor
+                : (isDarkMode ? Colors.grey[600] : Colors.grey[400]),
             onPressed: _isComposing ? _handleSubmitted : null,
           ),
         ],

@@ -27,28 +27,44 @@ class ChatController extends GetxController {
     currentCharacter = character;
 
     // Bu karakterle daha önce sohbet var mı kontrol et
-    final existingChat = allChats
-        .firstWhereOrNull((chat) => chat.character['name'] == characterName);
+    final existingChatIndex =
+        allChats.indexWhere((chat) => chat.character['name'] == characterName);
 
-    if (existingChat != null) {
+    if (existingChatIndex != -1) {
       // Var olan sohbeti yükle
-      messages.clear();
-      messages.assignAll(existingChat.messages);
-      debugPrint(
-          'Var olan sohbet yüklendi: $characterName, ${existingChat.messages.length} mesaj');
+      loadExistingChat(characterName);
     } else {
       // Yeni sohbet başlat
       messages.clear();
-      allChats.add(Chat(
+      final newChat = Chat(
         character: character,
         lastMessage: null,
         messages: [],
-      ));
+      );
+      allChats.insert(0, newChat); // Yeni sohbeti listenin başına ekle
       debugPrint('Yeni sohbet başlatıldı: $characterName');
     }
 
     // Değişiklikleri kaydet
     saveChatsToCache();
+  }
+
+  void loadExistingChat(String characterName) {
+    final existingChatIndex =
+        allChats.indexWhere((chat) => chat.character['name'] == characterName);
+
+    if (existingChatIndex != -1) {
+      // Var olan sohbeti yükle
+      messages.clear();
+      messages.assignAll(allChats[existingChatIndex].messages);
+
+      // Sohbeti listenin başına taşı
+      final chat = allChats.removeAt(existingChatIndex);
+      allChats.insert(0, chat);
+
+      debugPrint(
+          'Var olan sohbet yüklendi: $characterName, ${chat.messages.length} mesaj');
+    }
   }
 
   Future<void> loadChatsFromCache() async {
@@ -93,17 +109,25 @@ class ChatController extends GetxController {
     if (currentCharacter == null) return;
 
     final characterName = currentCharacter!['name'] as String;
-    final existingChat = allChats
-        .firstWhereOrNull((chat) => chat.character['name'] == characterName);
+    final existingChatIndex =
+        allChats.indexWhere((chat) => chat.character['name'] == characterName);
 
-    if (existingChat != null) {
+    if (existingChatIndex != -1) {
       // Mevcut sohbeti güncelle
-      final index = allChats.indexOf(existingChat);
-      allChats[index] = Chat(
+      final existingChat = allChats[existingChatIndex];
+
+      // Sohbeti güncelle
+      allChats[existingChatIndex] = Chat(
         character: existingChat.character,
         lastMessage: message,
         messages: List.from(messages), // Güncel mesajların kopyasını al
       );
+
+      // Sohbeti listenin başına taşı
+      if (existingChatIndex != 0) {
+        final chat = allChats.removeAt(existingChatIndex);
+        allChats.insert(0, chat);
+      }
 
       // Cache'i güncelle
       saveChatsToCache();

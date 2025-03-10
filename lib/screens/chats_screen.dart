@@ -90,6 +90,7 @@ class ChatsScreen extends GetView<ChatController> {
                 ),
                 onTap: () {
                   controller.currentCharacter = chat.character;
+                  controller.loadExistingChat(chat.character['name']);
                   Get.toNamed('/chat', arguments: chat.character);
                 },
               ),

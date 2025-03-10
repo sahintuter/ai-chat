@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../controllers/navigation_controller.dart';
-import '../widgets/bottom_navigation_bar.dart';
+import '../controllers/chat_controller.dart';
 import '../constants/app_sizes.dart';
 import '../constants/app_theme.dart';
 import '../controllers/profile_controller.dart';
@@ -13,23 +13,31 @@ class CharacterSelectionScreen extends GetView<NavigationController> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final chatController = Get.find<ChatController>();
+
     final List<Map<String, String>> characters = [
       {
         'image': 'https://picsum.photos/200',
         'name': 'Sarah',
-        'personality': 'Neşeli ve Enerjik'
+        'personality': 'Neşeli ve Enerjik',
+        'description':
+            'Hayat dolu ve pozitif bir karaktere sahip. Her zaman gülümsemeyi sever.'
       },
       {
         'image': 'https://picsum.photos/200',
         'name': 'Emma',
-        'personality': 'Romantik ve Düşünceli'
+        'personality': 'Romantik ve Düşünceli',
+        'description':
+            'Duygusal ve anlayışlı bir yapıya sahip. İyi bir dinleyicidir.'
       },
       {
         'image': 'https://picsum.photos/200',
         'name': 'Alice',
-        'personality': 'Romantik'
+        'personality': 'Romantik',
+        'description':
+            'Hayalperest ve yaratıcı bir ruha sahip. Sanat ve müzikle ilgilenir.'
       },
-      // Diğer karakterler...
     ];
 
     return PopScope(
@@ -46,30 +54,42 @@ class CharacterSelectionScreen extends GetView<NavigationController> {
           _buildPointsBadge(),
         ],
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.all(AppSizes.paddingM),
-              child: Text(
-                'Karakter Seçin',
-                style: GoogleFonts.poppins(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black87,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Sohbet Arkadaşını Seç',
+                    style: GoogleFonts.poppins(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: isDarkMode
+                          ? AppTheme.darkTextColor
+                          : AppTheme.lightTextColor,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Kendine en uygun karakteri seç ve sohbete başla',
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      color: isDarkMode
+                          ? AppTheme.darkTextColor.withOpacity(0.7)
+                          : AppTheme.lightTextColor.withOpacity(0.7),
+                    ),
+                  ),
+                ],
               ),
             ),
             Expanded(
-              child: GridView.builder(
+              child: ListView.builder(
                 padding: const EdgeInsets.all(AppSizes.paddingM),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: AppSizes.screenWidth(context) > 600 ? 3 : 2,
-                  crossAxisSpacing: AppSizes.paddingM,
-                  mainAxisSpacing: AppSizes.paddingM,
-                  childAspectRatio: 1,
-                ),
                 itemCount: characters.length,
                 itemBuilder: (context, index) =>
-                    _buildCharacterItem(context, characters[index]),
+                    _buildCharacterCard(context, characters[index]),
               ),
             ),
           ],
@@ -86,8 +106,8 @@ class CharacterSelectionScreen extends GetView<NavigationController> {
         vertical: AppSizes.paddingXS,
       ),
       decoration: BoxDecoration(
-        color: Colors.pink[100],
-        borderRadius: BorderRadius.circular(AppSizes.radiusM),
+        color: AppTheme.primaryColor.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(AppSizes.radiusL),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -99,7 +119,7 @@ class CharacterSelectionScreen extends GetView<NavigationController> {
                 style: GoogleFonts.poppins(
                   color: AppTheme.primaryColor,
                   fontSize: 14,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w600,
                 ),
               )),
         ],
@@ -107,41 +127,96 @@ class CharacterSelectionScreen extends GetView<NavigationController> {
     );
   }
 
-  Widget _buildCharacterItem(
+  Widget _buildCharacterCard(
       BuildContext context, Map<String, String> character) {
-    return GestureDetector(
-      onTap: () => _selectCharacter(character),
-      child: Column(
-        children: [
-          Expanded(
-            child: Hero(
-              tag: 'character_${character['name']}_${character.hashCode}',
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(AppSizes.radiusCircular),
-                  border: Border.all(color: Colors.grey[200]!, width: 1),
-                  image: DecorationImage(
-                    image: NetworkImage(character['image']!),
-                    fit: BoxFit.cover,
-                  ),
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    return Card(
+      margin: const EdgeInsets.only(bottom: AppSizes.paddingL),
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppSizes.radiusL),
+      ),
+      child: InkWell(
+        onTap: () => _selectCharacter(character),
+        borderRadius: BorderRadius.circular(AppSizes.radiusL),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(AppSizes.radiusL),
+              ),
+              child: Hero(
+                tag: 'character_${character['name']}_${character.hashCode}',
+                child: Image.network(
+                  character['image']!,
+                  height: 200,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            character['name']!,
-            style: GoogleFonts.poppins(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
+            Padding(
+              padding: const EdgeInsets.all(AppSizes.paddingM),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        character['name']!,
+                        style: GoogleFonts.poppins(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: isDarkMode
+                              ? AppTheme.darkTextColor
+                              : AppTheme.lightTextColor,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppTheme.primaryColor.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(AppSizes.radiusS),
+                        ),
+                        child: Text(
+                          character['personality']!,
+                          style: GoogleFonts.poppins(
+                            fontSize: 12,
+                            color: AppTheme.primaryColor,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    character['description']!,
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      color: isDarkMode
+                          ? AppTheme.darkTextColor.withOpacity(0.7)
+                          : AppTheme.lightTextColor.withOpacity(0.7),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   void _selectCharacter(Map<String, String> character) {
+    final chatController = Get.find<ChatController>();
+    chatController.startNewChat(character);
     Get.toNamed('/chat', arguments: character);
   }
 }

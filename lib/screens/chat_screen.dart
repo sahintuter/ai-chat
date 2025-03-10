@@ -7,31 +7,13 @@ import '../widgets/chat_input.dart';
 import '../widgets/bottom_navigation_bar.dart';
 import '../widgets/scaffold_layout.dart';
 
-class ChatScreen extends StatefulWidget {
+class ChatScreen extends GetView<ChatController> {
   const ChatScreen({super.key});
 
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
-}
-
-class _ChatScreenState extends State<ChatScreen> {
-  late final ChatController controller;
-  late final Map<String, dynamic> character;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = Get.find<ChatController>();
-    character = Get.arguments as Map<String, dynamic>;
-
-    // Sadece bir kez çağrılır
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.startNewChat(character);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final character = Get.arguments as Map<String, dynamic>;
+
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
