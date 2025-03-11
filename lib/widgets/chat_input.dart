@@ -79,7 +79,7 @@ class _ChatInputState extends State<ChatInput> {
                 border: InputBorder.none,
                 hintStyle: GoogleFonts.poppins(
                   color: isDarkMode
-                      ? AppTheme.darkTextColor.withOpacity(0.5)
+                      ? AppTheme.darkTextColor.withAlpha(128)
                       : Colors.grey[400],
                 ),
               ),

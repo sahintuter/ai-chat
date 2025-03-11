@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/chat_controller.dart';
-import '../controllers/navigation_controller.dart';
 import '../widgets/chat_message_bubble.dart';
 import '../widgets/chat_input.dart';
-import '../widgets/bottom_navigation_bar.dart';
 import '../widgets/scaffold_layout.dart';
 
 class ChatScreen extends GetView<ChatController> {

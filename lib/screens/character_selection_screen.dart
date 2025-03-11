@@ -14,7 +14,6 @@ class CharacterSelectionScreen extends GetView<NavigationController> {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final chatController = Get.find<ChatController>();
 
     final List<Map<String, String>> characters = [
       {
@@ -77,8 +76,8 @@ class CharacterSelectionScreen extends GetView<NavigationController> {
                     style: GoogleFonts.poppins(
                       fontSize: 14,
                       color: isDarkMode
-                          ? AppTheme.darkTextColor.withOpacity(0.7)
-                          : AppTheme.lightTextColor.withOpacity(0.7),
+                          ? AppTheme.darkTextColor.withAlpha(204)
+                          : AppTheme.lightTextColor.withAlpha(204),
                     ),
                   ),
                 ],
@@ -106,7 +105,7 @@ class CharacterSelectionScreen extends GetView<NavigationController> {
         vertical: AppSizes.paddingXS,
       ),
       decoration: BoxDecoration(
-        color: AppTheme.primaryColor.withOpacity(0.1),
+        color: AppTheme.primaryColor.withAlpha(26),
         borderRadius: BorderRadius.circular(AppSizes.radiusL),
       ),
       child: Row(
@@ -181,7 +180,7 @@ class CharacterSelectionScreen extends GetView<NavigationController> {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: AppTheme.primaryColor.withOpacity(0.1),
+                          color: AppTheme.primaryColor.withAlpha(26),
                           borderRadius: BorderRadius.circular(AppSizes.radiusS),
                         ),
                         child: Text(
@@ -201,8 +200,8 @@ class CharacterSelectionScreen extends GetView<NavigationController> {
                     style: GoogleFonts.poppins(
                       fontSize: 14,
                       color: isDarkMode
-                          ? AppTheme.darkTextColor.withOpacity(0.7)
-                          : AppTheme.lightTextColor.withOpacity(0.7),
+                          ? AppTheme.darkTextColor.withAlpha(204)
+                          : AppTheme.lightTextColor.withAlpha(204),
                     ),
                   ),
                 ],

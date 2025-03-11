@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../controllers/navigation_controller.dart';
-import '../widgets/bottom_navigation_bar.dart';
 import '../constants/app_theme.dart';
 import '../constants/app_sizes.dart';
 import '../controllers/theme_controller.dart';

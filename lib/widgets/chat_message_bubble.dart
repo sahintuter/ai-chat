@@ -64,7 +64,7 @@ class ChatMessageBubble extends StatelessWidget {
     return CircleAvatar(
       radius: 16,
       backgroundColor: message.isUser
-          ? AppTheme.primaryColor.withOpacity(0.8)
+          ? AppTheme.primaryColor.withAlpha(204)
           : isDarkMode
               ? AppTheme.darkCardColor
               : AppTheme.lightCardColor,

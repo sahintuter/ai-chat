@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../controllers/chat_controller.dart';
-import '../controllers/navigation_controller.dart';
-import '../widgets/bottom_navigation_bar.dart';
 import '../constants/app_theme.dart';
-import '../constants/app_sizes.dart';
 import '../widgets/scaffold_layout.dart';
 
 class ChatsScreen extends GetView<ChatController> {
@@ -74,7 +71,7 @@ class ChatsScreen extends GetView<ChatController> {
                     Container(
                       padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
-                        color: AppTheme.primaryColor.withOpacity(0.1),
+                        color: AppTheme.primaryColor.withAlpha(26),
                         shape: BoxShape.circle,
                       ),
                       child: Text(
