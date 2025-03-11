@@ -46,3 +46,12 @@ app.*.map.json
 
 # Env files
 .env
+
+# Keystore files
+*.jks
+*.keystore
+/android/keystore/
+/android/app/keystore/
+
+# Key properties
+/android/key.properties
