@@ -14,8 +14,8 @@ val keystoreProperties = Properties()
 keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 
 android {
-    namespace = "com.example.ai_chat_app"
-    compileSdk = flutter.compileSdkVersion
+    namespace = "com.luvoria.chat"
+    compileSdk = 34
     ndkVersion = "27.0.12077973"
 
     compileOptions {
@@ -54,7 +54,16 @@ android {
             // Release yapılandırması için imzalama konfigürasyonunu kullan
             signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+        debug {
+            // Debug yapılandırması
+            isMinifyEnabled = false
+            isShrinkResources = false
         }
     }
 }

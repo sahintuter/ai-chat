@@ -1,4 +1,4 @@
-package com.example.ai_girlfriend_chat
+package com.luvoria.chat
 
 import io.flutter.embedding.android.FlutterActivity
 

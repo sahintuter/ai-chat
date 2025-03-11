@@ -69,7 +69,7 @@ class ChatMessageBubble extends StatelessWidget {
               ? AppTheme.darkCardColor
               : AppTheme.lightCardColor,
       child: Icon(
-        message.isUser ? Icons.person : Icons.android,
+        message.isUser ? Icons.person : Icons.person_2,
         color: message.isUser ? Colors.white : AppTheme.primaryColor,
         size: 18,
       ),
