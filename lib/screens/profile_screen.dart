@@ -54,6 +54,9 @@ class ProfileScreen extends GetView<NavigationController> {
   }
 
   Widget _buildStatsSection() {
+    final profileController = Get.find<ProfileController>();
+    final chatController = Get.find<ChatController>();
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(AppSizes.paddingM),
@@ -68,9 +71,12 @@ class ProfileScreen extends GetView<NavigationController> {
               ),
             ),
             const SizedBox(height: AppSizes.paddingM),
-            _buildStatItem('Toplam Sohbet', '5'),
-            _buildStatItem('Toplam Mesaj', '123'),
-            _buildStatItem('Kalan Token', '500'),
+            Obx(() => _buildStatItem(
+                'Toplam Sohbet', '${chatController.allChats.length}')),
+            Obx(() => _buildStatItem(
+                'Toplam Mesaj', '${chatController.messages.length}')),
+            Obx(() => _buildStatItem(
+                'Kalan Token', '${profileController.remainingTokens}')),
           ],
         ),
       ),
