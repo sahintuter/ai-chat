@@ -14,3 +14,41 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+
+```
+ Future<String> getId() async {
+    String deviceId = "";
+
+    if (Platform.isIOS) {
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+
+      // identifierForVendor null veya boş ise alternatif ID oluştur
+      if (iosInfo.identifierForVendor != null &&
+          iosInfo.identifierForVendor!.isNotEmpty) {
+        deviceId = iosInfo.identifierForVendor!;
+      } else {
+        // Keychain'den kayıtlı ID'yi al veya yeni oluştur
+        const storage = FlutterSecureStorage();
+        String? storedId = await storage.read(key: 'device_fallback_id');
+
+        if (storedId != null && storedId.isNotEmpty) {
+          deviceId = storedId;
+        } else {
+          // Cihaza özgü sabit bir ID oluştur
+          String fallbackId =
+              '${iosInfo.model}-${iosInfo.systemVersion}-${DateTime.now().millisecondsSinceEpoch}';
+          await storage.write(key: 'device_fallback_id', value: fallbackId);
+          deviceId = fallbackId;
+        }
+      }
+    } else {
+      const androidIdPlugin = AndroidId();
+      deviceId = await androidIdPlugin.getId() ?? '';
+      return deviceId;
+    }
+
+    return deviceId;
+  }
+```
